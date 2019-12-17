@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Floor from '@/components/Floor.vue';
 
 Vue.use(Router);
 
