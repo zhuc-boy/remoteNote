@@ -1,12 +1,13 @@
 <template>
-    <div>
-        <div>
+    <div class="fengbu">
+        <div class="screen" ref="screen">
             <div ref="zrenders" id="zrenders" style="width: max-content;"></div>
             <div class="ins" v-show="showinput" :style="{top:i_top+'px',left:i_left+'px',width:i_width}">
                 <textarea v-model="inputvalue" type="text" @blur="inputblur" />
                 </div>
         </div>
-        <div>
+        <div class="tool">
+            <input  class="imgupload" type="file" accept="image/*" multiple="" @change="getpic">
             <button @click="reset">重置</button>
             <button @click="back">撤回</button>
             线条粗细：
@@ -36,15 +37,13 @@
                 <option value="false">否</option>
                 <option value="true">是</option>
             </select>
-        </div>
-        <div>
             <button @click="paintpic">导出图片</button>
         </div>
     </div>
 </template>
 
 <script>
-import imgsrc from './img.json'
+//import imgsrc from './img.json'
 import zrender from 'zrender'
 export default {
     name: 's_d',
@@ -55,10 +54,11 @@ export default {
             height: 0,
             track_tempe: [],
             tempguiji: [],
-            imgsrc: imgsrc,
+            imgsrc: '',
+            //imgbase: '',
             //imgurl: 'http://dmimg.5054399.com/allimg/pkm/pk/22.jpg',
             downflag: false,
-            shapemode: 'pen',
+            shapemode: 'rect',
             fontsize: 3,
             color: '#000000',
             txtmodel: 'false',
@@ -83,13 +83,15 @@ export default {
             zhexian: new zrender.Polyline({
                 //draggable: true,
             }),//默认曲线
-
+            cfxg: new zrender.Group(),//长方形容器
+            boundingRect: new zrender.Rect(),
             g: new zrender.Group(),//存放所有图形的容器
         }
     },
     created() {
-        this.width = 600
-        this.height = 500
+        //console.log(document.body.clientWidth, document.body.clientHeight)
+        this.width = document.body.clientWidth
+        this.height = document.body.clientHeight
     },
     mounted() {
         this.$socket.emit('connect', 1)
@@ -98,42 +100,13 @@ export default {
             width: this.width,
             height: this.height
         });
-        let img = new Image();
-        img.src = imgsrc;
 
-        let w = img.width;
-        let h = img.height;
-        if (this.width / this.height > w / h) {
-            let bgi = new zrender.Image({
-                style: {
-                    image: this.imgsrc,
-                    x: (this.width - w * this.height / h) / 2,
-                    y: 0,
-                    width: w * this.height / h,
-                    height: this.height,
-
-                },
-                //cursor: 'wait',
-            })
-            this.zr.add(bgi)
-        } else {
-            let bgi = new zrender.Image({
-                style: {
-                    image: this.imgsrc,
-                    x: 0,
-                    y: (this.height - h * this.width / w) / 2,
-                    width: this.width,
-                    height: h * this.width / w,
-
-                },
-                //cursor: 'wait',
-            })
-            this.zr.add(bgi)
-        }
         this.zr.add(this.changfangxing)
         this.zr.add(this.tuoyuan)
         this.zr.add(this.zhexian)
         //this.zr.add(this.wenben)
+        this.zr.add(this.cfxg)
+        this.cfxg.dirty()
         this.zr.add(this.g)
         this.$refs.zrenders.addEventListener('mousedown', this.part1)
         this.$refs.zrenders.addEventListener('mousemove', this.part2)
@@ -205,6 +178,7 @@ export default {
             this.g.add(tempellipse)
         },
         sendpath: function (data) {
+            console.log(data.points)
             let templine = new zrender.Polyline({
                 draggable: true,
                 shape: {
@@ -321,7 +295,6 @@ export default {
                     if (this.inputvalue == '') {
                         this.showinput = false
                         this.inputflag = !this.inputflag
-
                     }
                 }
             } else {
@@ -367,6 +340,9 @@ export default {
                             //opacity: 0.5
                         },
                     })
+                    //this.cfxhui({ x: this.clickSx, y: this.clickSy }, { x: this.clickEx, y: this.clickEy })
+
+
                 } else if (this.shapemode == 'ellipse') {
                     this.tuoyuan.show()
                     this.tuoyuan.dirty()
@@ -391,6 +367,7 @@ export default {
         part3: function () {
             if (this.downflag == true) {
                 if (this.shapemode == 'rect') {
+                    //this.cfxhui({ x: this.clickSx, y: this.clickSy }, { x: this.clickEx, y: this.clickEy })
                     let temprect = new zrender.Rect({
                         draggable: true,
                         shape: {
@@ -506,6 +483,237 @@ export default {
             }
             this.downflag = false
         },
+        getpic: function (e) {
+            //console.log(e)
+            var file = e.srcElement.files[0];
+            if (window.FileReader) {
+                let fr = new FileReader();
+                fr.onloadend = (e) => {
+                    this.imgsrc = e.target.result;
+                    let img = new Image();
+                    img.src = this.imgsrc;
+
+                    let w = img.width;
+                    let h = img.height;
+                    if (this.width / this.height > w / h) {
+                        let bgi = new zrender.Image({
+                            zlevel: -1,
+                            style: {
+                                image: this.imgsrc,
+                                x: (this.width - w * this.height / h) / 2,
+                                y: 0,
+                                width: w * this.height / h,
+                                height: this.height,
+
+                            },
+                            //cursor: 'wait',
+                        })
+                        this.zr.add(bgi)
+                    } else {
+                        let bgi = new zrender.Image({
+                            zlevel: -1,
+                            style: {
+                                image: this.imgsrc,
+                                x: 0,
+                                y: (this.height - h * this.width / w) / 2,
+                                width: this.width,
+                                height: h * this.width / w,
+
+                            },
+                            //cursor: 'wait',
+                        })
+                        this.zr.add(bgi)
+                    }
+
+                };
+                fr.readAsDataURL(file);  //也是利用将图片作为url读出
+            }
+        },
+        cfxhui: function (arr1, arr2) {
+            this.cfxg.removeAll()
+            let elementStyle = {
+                stroke: '#ccc',
+                fill: null
+            };
+            let radius = 7
+            let circle1 = new zrender.Circle({
+                draggable: true,
+                cursor: 'move',
+                shape: {
+                    cx: arr1.x,
+                    cy: arr1.y,
+                    r: radius
+                },
+                style: elementStyle,
+            })
+                .on('mousemove', function () {
+                    var rect = this.cfxg.getBoundingRect();
+                    this.boundingRect.setShape({
+                        x: rect.x,
+                        y: rect.y,
+                        width: rect.width,
+                        height: rect.height
+                    });
+
+                });
+            let circle2 = new zrender.Circle({
+                draggable: true,
+                shape: {
+                    cx: (arr1.x + arr2.x) / 2,
+                    cy: arr1.y,
+                    r: radius
+                },
+                style: elementStyle,
+            })
+                .on('mousemove', function () {
+                    var rect = this.cfxg.getBoundingRect();
+                    this.boundingRect.setShape({
+                        x: rect.x,
+                        y: rect.y,
+                        width: rect.width,
+                        height: rect.height
+                    });
+
+                });
+            let circle3 = new zrender.Circle({
+                draggable: true,
+                shape: {
+                    cx: arr2.x,
+                    cy: arr1.y,
+                    r: radius
+                },
+                style: elementStyle,
+            })
+                .on('mousemove', function () {
+                    var rect = this.cfxg.getBoundingRect();
+                    this.boundingRect.setShape({
+                        x: rect.x,
+                        y: rect.y,
+                        width: rect.width,
+                        height: rect.height
+                    });
+
+                });
+            let circle4 = new zrender.Circle({
+                draggable: true,
+                shape: {
+                    cx: arr1.x,
+                    cy: (arr1.y + arr2.y) / 2,
+                    r: radius
+                },
+                style: elementStyle,
+            })
+                .on('mousemove', function () {
+                    var rect = this.cfxg.getBoundingRect();
+                    this.boundingRect.setShape({
+                        x: rect.x,
+                        y: rect.y,
+                        width: rect.width,
+                        height: rect.height
+                    });
+
+                });
+            let circle5 = new zrender.Circle({
+                draggable: true,
+                shape: {
+                    cx: arr2.x,
+                    cy: (arr1.y + arr2.y) / 2,
+                    r: radius
+                },
+                style: elementStyle,
+            })
+                .on('mousemove', function () {
+                    var rect = this.cfxg.getBoundingRect();
+                    this.boundingRect.setShape({
+                        x: rect.x,
+                        y: rect.y,
+                        width: rect.width,
+                        height: rect.height
+                    });
+
+                });
+            let circle6 = new zrender.Circle({
+                draggable: true,
+                shape: {
+                    cx: arr1.x,
+                    cy: arr2.y,
+                    r: radius
+                },
+                style: elementStyle,
+            })
+                .on('mousemove', function () {
+                    var rect = this.cfxg.getBoundingRect();
+                    this.boundingRect.setShape({
+                        x: rect.x,
+                        y: rect.y,
+                        width: rect.width,
+                        height: rect.height
+                    });
+
+                });
+            let circle7 = new zrender.Circle({
+                draggable: true,
+                shape: {
+                    cx: (arr1.x + arr2.x) / 2,
+                    cy: arr2.y,
+                    r: radius
+                },
+                style: elementStyle,
+            })
+                .on('mousemove', function () {
+                    var rect = this.cfxg.getBoundingRect();
+                    this.boundingRect.setShape({
+                        x: rect.x,
+                        y: rect.y,
+                        width: rect.width,
+                        height: rect.height
+                    });
+
+                });
+            let circle8 = new zrender.Circle({
+                draggable: true,
+                shape: {
+                    cx: arr2.x,
+                    cy: arr2.y,
+                    r: radius
+                },
+                style: elementStyle,
+            })
+                .on('mousemove', function () {
+                    var rect = this.cfxg.getBoundingRect();
+                    this.boundingRect.setShape({
+                        x: rect.x,
+                        y: rect.y,
+                        width: rect.width,
+                        height: rect.height
+                    });
+
+                });
+            this.cfxg.add(circle1)
+            this.cfxg.add(circle2)
+            this.cfxg.add(circle3)
+            this.cfxg.add(circle4)
+            this.cfxg.add(circle5)
+            this.cfxg.add(circle6)
+            this.cfxg.add(circle7)
+            this.cfxg.add(circle8)
+            var rect = this.cfxg.getBoundingRect();
+            this.boundingRect.attr({
+                shape: {
+                    cx: 0,
+                    cy: 0,
+                    x: rect.x + radius,
+                    y: rect.y + radius,
+                    width: rect.width - 2 * radius,
+                    height: rect.height - 2 * radius
+                },
+                style: {
+                    fill: 'none',
+                    stroke: '#14f1ff'
+                }
+            });
+            this.cfxg.add(this.boundingRect);
+        }
     },
 }
 </script>
@@ -521,6 +729,40 @@ export default {
         padding: 5px;
         background-color: rgba(100, 100, 100, 0.3);
         color: red;
+    }
+}
+.fengbu {
+    display: flex;
+    .screen {
+        width: calc(100% - 90px);
+        //flex-basis: auto;
+    }
+    .tool {
+        z-index: 10000;
+        width: 90px;
+        //flex-basis: 90px;
+        display: flex;
+        flex-direction: column;
+        .imgupload_1 {
+            position: absolute;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            &::before {
+                height: 32px;
+                content: "添加图片";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                -webkit-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+                background-color: #a3a3a3;
+            }
+        }
     }
 }
 </style>
