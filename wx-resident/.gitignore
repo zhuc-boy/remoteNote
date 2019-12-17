@@ -1,0 +1,12 @@
+*.log*
+.cache
+.DS_Store
+.idea
+.vscode
+node_modules
+yarn.lock
+/dist
+
+# local env files
+.env.local
+.env.*.local
