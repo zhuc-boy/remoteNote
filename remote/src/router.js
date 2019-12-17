@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+//import Floor from '@/components/Floor.vue';
 
 Vue.use(Router);
 
@@ -9,24 +10,28 @@ const routesone = [
         name: "index",
         redirect: '/s',
         meta: {
-            title: '远程绘图'
+            title: '家庭医生'
         },
     },
     {
         path: "/s",
         name: "s",
-        component: () => import(/* webpackChunkName: "login" */ "./views/huitu.vue"),
+        component: () => import(/* webpackChunkName: "addFamily" */ "./views/huitu.vue"),
         meta: {
-            title: '远程绘图'
-        },
-    }
+            title: 'ceshi',
+            id: 4
+        }
+    },
+
 ];
 
-routesone.forEach(route => {
+const routes = new Array().concat(routesone)
+// add route path
+routes.forEach(route => {
     route.path = route.path || '/' + (route.name || '');
 });
 
-const router = new Router({ routesone });
+const router = new Router({ routes });
 
 router.beforeEach((to, from, next) => {
     const title = to.meta && to.meta.title;

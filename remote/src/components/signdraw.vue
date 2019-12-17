@@ -61,7 +61,7 @@ export default {
             shapemode: 'pen',
             fontsize: 3,
             color: '#000000',
-            txtmodel: 'true',
+            txtmodel: 'false',
             showinput: false,
             i_top: 0,
             i_left: 0,
@@ -208,11 +208,11 @@ export default {
             let templine = new zrender.Polyline({
                 draggable: true,
                 shape: {
-                    points: data.points
+                    points: JSON.parse(data.points)
                 },
                 style: {
-                    lineWidth: data.font,
-                    stroke: data.color,
+                    lineWidth: data.lineWidth,
+                    stroke: data.stroke,
                     //opacity: 0.5
                 },
                 cursor: 'move'
