@@ -86,6 +86,7 @@ export default {
             cfxg: new zrender.Group(),//长方形容器
             boundingRect: new zrender.Rect(),
             g: new zrender.Group(),//存放所有图形的容器
+            bgi: new zrender.Image(),//存放所有图形的容器
         }
     },
     created() {
@@ -108,6 +109,7 @@ export default {
         this.zr.add(this.cfxg)
         this.cfxg.dirty()
         this.zr.add(this.g)
+        this.zr.add(this.bgi)
         this.$refs.zrenders.addEventListener('mousedown', this.part1)
         this.$refs.zrenders.addEventListener('mousemove', this.part2)
         this.$refs.zrenders.addEventListener('mouseup', this.part3)
@@ -271,9 +273,10 @@ export default {
             }
         },
         back: function () {
-            let id = this.shapeid.pop();
+            console.log(this.shapeid)
+            /* let id = this.shapeid.pop();
             this.g.remove(id)
-            this.zr.refresh()
+            this.zr.refresh() */
         },
         reset: function () {
             this.g.removeAll()
@@ -492,38 +495,38 @@ export default {
                     this.imgsrc = e.target.result;
                     let img = new Image();
                     img.src = this.imgsrc;
+                    img.onload = () => {
+                        let w = img.width;
+                        let h = img.height;
+                        if (this.width / this.height > w / h) {
+                            this.bgi.attr({
+                                zlevel: -1,
+                                style: {
+                                    image: this.imgsrc,
+                                    x: (this.width - w * this.height / h) / 2,
+                                    y: 0,
+                                    width: w * this.height / h,
+                                    height: this.height,
 
-                    let w = img.width;
-                    let h = img.height;
-                    if (this.width / this.height > w / h) {
-                        let bgi = new zrender.Image({
-                            zlevel: -1,
-                            style: {
-                                image: this.imgsrc,
-                                x: (this.width - w * this.height / h) / 2,
-                                y: 0,
-                                width: w * this.height / h,
-                                height: this.height,
+                                },
+                                //cursor: 'wait',
+                            })
+                        } else {
+                            this.bgi.attr({
+                                zlevel: -1,
+                                style: {
+                                    image: this.imgsrc,
+                                    x: 0,
+                                    y: (this.height - h * this.width / w) / 2,
+                                    width: this.width,
+                                    height: h * this.width / w,
 
-                            },
-                            //cursor: 'wait',
-                        })
-                        this.zr.add(bgi)
-                    } else {
-                        let bgi = new zrender.Image({
-                            zlevel: -1,
-                            style: {
-                                image: this.imgsrc,
-                                x: 0,
-                                y: (this.height - h * this.width / w) / 2,
-                                width: this.width,
-                                height: h * this.width / w,
-
-                            },
-                            //cursor: 'wait',
-                        })
-                        this.zr.add(bgi)
+                                },
+                                //cursor: 'wait',
+                            })
+                        }
                     }
+
 
                 };
                 fr.readAsDataURL(file);  //也是利用将图片作为url读出
