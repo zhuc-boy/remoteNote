@@ -367,11 +367,10 @@ export default {
                     })
                 }
             }
-
         },
         part3: function () {
-            console.log(`起点：${this.clickSx} ${this.clickSy} 终点：${this.clickEx} ${this.clickEy}`)
-            if (this.downflag == true) {
+            //console.log(`起点：${this.clickSx} ${this.clickSy} 终点：${this.clickEx} ${this.clickEy}`)
+            if (this.downflag == true && this.clickEx != 0 && this.clickEy != 0) {
                 if (this.shapemode == 'rect') {
                     //this.cfxhui({ x: this.clickSx, y: this.clickSy }, { x: this.clickEx, y: this.clickEy })
                     let temprect = new zrender.Rect({
@@ -488,6 +487,8 @@ export default {
                 }
             }
             this.downflag = false
+            this.clickEx = 0
+            this.clickEy = 0
         },
         getpic: function (e) {
             //console.log(e)
