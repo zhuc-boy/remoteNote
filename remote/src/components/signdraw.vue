@@ -234,6 +234,42 @@ export default {
             })
             this.shapeid.push(wenben)
             this.g.add(wenben)
+        },
+        sendimg: function (data) {
+            this.imgsrc = data.imgsrc;
+            let img = new Image();
+            img.src = this.imgsrc;
+            img.onload = () => {
+                let w = img.width;
+                let h = img.height;
+                if (this.width / this.height > w / h) {
+                    this.bgi.attr({
+                        zlevel: -1,
+                        style: {
+                            image: this.imgsrc,
+                            x: (this.width - w * this.height / h) / 2,
+                            y: 0,
+                            width: w * this.height / h,
+                            height: this.height,
+
+                        },
+                        //cursor: 'wait',
+                    })
+                } else {
+                    this.bgi.attr({
+                        zlevel: -1,
+                        style: {
+                            image: this.imgsrc,
+                            x: 0,
+                            y: (this.height - h * this.width / w) / 2,
+                            width: this.width,
+                            height: h * this.width / w,
+
+                        },
+                        //cursor: 'wait',
+                    })
+                }
+            }
         }
     },
     methods: {
@@ -529,6 +565,9 @@ export default {
                                 //cursor: 'wait',
                             })
                         }
+                        this.$socket.emit('img', {
+                            imgsrc: this.imgsrc,
+                        })
                     }
 
 
