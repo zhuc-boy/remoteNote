@@ -2,7 +2,7 @@
     <div class="fengbu">
         <div class="screen" ref="screen">
             <div ref="zrenders" id="zrenders" style="width: max-content;"></div>
-            <div class="ins" v-show="showinput" :style="{top:i_top+'px',left:i_left+'px',width:i_width}">
+            <div class="ins" v-show="showinput" :style="{top:i_top+'px',left:i_left+'px',width:i_width,color:color}">
                 <textarea v-model="inputvalue" type="text" @blur="inputblur" />
                 </div>
         </div>
@@ -218,6 +218,7 @@ export default {
                     fontSize: '14',
                     fontWeight: '1000',
                     fill: '#00ff00',
+                    textFill: data.textFill
                 }
             })
             wenben.on("mousedown", () => {
@@ -247,6 +248,7 @@ export default {
                         fontSize: '14',
                         fontWeight: '1000',
                         fill: '#00ff00',
+                        textFill: this.color
                     }
                 })
                 wenben.on("mousedown", () => {
@@ -265,6 +267,7 @@ export default {
                 this.$socket.emit('word', {
                     position: JSON.stringify([this.i_left, this.i_top]),
                     text: this.inputvalue,
+                    textFill: this.color
                 })
                 this.showinput = false
                 this.inputflag = !this.inputflag
@@ -367,6 +370,7 @@ export default {
 
         },
         part3: function () {
+            console.log(`起点：${this.clickSx} ${this.clickSy} 终点：${this.clickEx} ${this.clickEy}`)
             if (this.downflag == true) {
                 if (this.shapemode == 'rect') {
                     //this.cfxhui({ x: this.clickSx, y: this.clickSy }, { x: this.clickEx, y: this.clickEy })
@@ -730,7 +734,7 @@ export default {
         -webkit-appearance: none;
         padding: 5px;
         background-color: rgba(100, 100, 100, 0.3);
-        color: red;
+        color: inherit;
     }
 }
 .fengbu {
