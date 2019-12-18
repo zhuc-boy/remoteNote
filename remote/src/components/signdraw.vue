@@ -31,6 +31,7 @@
                 <option value="pen">笔</option>
                 <option value="rect">矩形框</option>
                 <option value="ellipse">椭圆框</option>
+                <option value="arrow">箭头</option>
             </select>
             文本输入：
             <select v-model="txtmodel">
@@ -84,6 +85,7 @@ export default {
                 //draggable: true,
             }),//默认曲线
             cfxg: new zrender.Group(),//长方形容器
+            arrow: new zrender.Group(),//箭头
             boundingRect: new zrender.Rect(),
             g: new zrender.Group(),//存放所有图形的容器
             bgi: new zrender.Image(),//存放所有图形的容器
@@ -110,6 +112,7 @@ export default {
         this.cfxg.dirty()
         this.zr.add(this.g)
         this.zr.add(this.bgi)
+        this.zr.add(this.arrow)
         this.$refs.zrenders.addEventListener('mousedown', this.part1)
         this.$refs.zrenders.addEventListener('mousemove', this.part2)
         this.$refs.zrenders.addEventListener('mouseup', this.part3)
@@ -401,6 +404,48 @@ export default {
                             //opacity: 0.5
                         },
                     })
+                }
+                else if (this.shapemode == 'arrow') {
+                    debugger
+                    let trueL = Math.sqrt(Math.abs(this.clickSy - this.clickEy) * Math.abs(this.clickSy - this.clickEy) + Math.abs(this.clickSx - this.clickEx) * Math.abs(this.clickSx - this.clickEx))
+                    //真实长度 箭头设置长宽度10/1
+                    let y1 = this.clickSy + Math.abs(this.clickSx - this.clickEx) * 0.1 * trueL
+                    let x1 = this.clickSx + Math.abs(this.clickSy - this.clickEy) * 0.1 * trueL
+
+                    let y2 = this.clickSy - Math.abs(this.clickSx - this.clickEx) * 0.1 * trueL
+                    let x2 = this.clickSx - Math.abs(this.clickSy - this.clickEy) * 0.1 * trueL
+                    /* function drawArrow(ctx, fromX, fromY, toX, toY, theta, headlen, width, color) {
+                        var theta = theta || 30,
+                            headlen = headlen || 10,
+                            width = width || 1,
+                            color = color || '#000',
+                            angle = Math.atan2(fromY - toY, fromX - toX) * 180 / Math.PI,
+                            angle1 = (angle + theta) * Math.PI / 180,
+                            angle2 = (angle - theta) * Math.PI / 180,
+                            topX = headlen * Math.cos(angle1),
+                            topY = headlen * Math.sin(angle1),
+                            botX = headlen * Math.cos(angle2),
+                            botY = headlen * Math.sin(angle2);
+                        ctx.save();
+                        ctx.beginPath();
+                        var arrowX, arrowY;
+                        ctx.moveTo(fromX, fromY);
+                        ctx.lineTo(toX, toY);
+                        arrowX = toX + topX;
+                        arrowY = toY + topY;
+                        ctx.moveTo(arrowX, arrowY);
+                        ctx.lineTo(toX, toY);
+                        arrowX = toX + botX;
+                        arrowY = toY + botY;
+                        ctx.lineTo(arrowX, arrowY);
+                        ctx.strokeStyle = color;
+                        ctx.lineWidth = width;
+                        ctx.stroke();
+                        ctx.restore();
+                    } */
+                    this.tuoyuan.show()
+                    this.tuoyuan.dirty()
+
                 }
             }
         },
