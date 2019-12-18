@@ -273,10 +273,9 @@ export default {
             }
         },
         back: function () {
-            console.log(this.shapeid)
-            /* let id = this.shapeid.pop();
+            let id = this.shapeid.pop();
             this.g.remove(id)
-            this.zr.refresh() */
+            this.zr.refresh()
         },
         reset: function () {
             this.g.removeAll()
