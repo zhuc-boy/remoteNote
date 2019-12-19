@@ -59,7 +59,7 @@ export default {
             //imgbase: '',
             //imgurl: 'http://dmimg.5054399.com/allimg/pkm/pk/22.jpg',
             downflag: false,
-            shapemode: 'rect',
+            shapemode: 'arrow',
             fontsize: 3,
             color: '#000000',
             txtmodel: 'false',
@@ -85,7 +85,7 @@ export default {
                 //draggable: true,
             }),//默认曲线
             cfxg: new zrender.Group(),//长方形容器
-            arrow: new zrender.Group(),//箭头
+            arrow: new zrender.Polyline(),//箭头
             boundingRect: new zrender.Rect(),
             g: new zrender.Group(),//存放所有图形的容器
             bgi: new zrender.Image(),//存放所有图形的容器
@@ -273,6 +273,33 @@ export default {
                     })
                 }
             }
+        },
+        sendarrow: function (data) {
+            let arrow = new zrender.Polyline({
+                draggable: true,
+                shape: {
+                    points: data.points,
+                    smooth: 0.1
+                },
+                style: {
+                    lineWidth: data.lineWidth,
+                    stroke: data.stroke,
+                },
+                cursor: 'move'
+            })
+            arrow.on("mousedown", () => {
+                this.$refs.zrenders.removeEventListener('mousedown', this.part1)
+                this.$refs.zrenders.removeEventListener('mousemove', this.part2)
+                this.$refs.zrenders.removeEventListener('mouseup', this.part3)
+                this.downflag = false
+            })
+            arrow.on("mouseup", () => {
+                this.$refs.zrenders.addEventListener('mousedown', this.part1)
+                this.$refs.zrenders.addEventListener('mousemove', this.part2)
+                this.$refs.zrenders.addEventListener('mouseup', this.part3)
+            })
+            this.shapeid.push(arrow)
+            this.g.add(arrow)
         }
     },
     methods: {
@@ -328,6 +355,7 @@ export default {
             let dataURL = ctx[0].toDataURL("image/png", 1)
             console.log(dataURL)
         },
+
         part1: function (e) {
             if (this.txtmodel == 'true') {
                 if (this.inputflag == false) {
@@ -406,46 +434,36 @@ export default {
                     })
                 }
                 else if (this.shapemode == 'arrow') {
-                    debugger
-                    let trueL = Math.sqrt(Math.abs(this.clickSy - this.clickEy) * Math.abs(this.clickSy - this.clickEy) + Math.abs(this.clickSx - this.clickEx) * Math.abs(this.clickSx - this.clickEx))
-                    //真实长度 箭头设置长宽度10/1
-                    let y1 = this.clickSy + Math.abs(this.clickSx - this.clickEx) * 0.1 * trueL
-                    let x1 = this.clickSx + Math.abs(this.clickSy - this.clickEy) * 0.1 * trueL
-
-                    let y2 = this.clickSy - Math.abs(this.clickSx - this.clickEx) * 0.1 * trueL
-                    let x2 = this.clickSx - Math.abs(this.clickSy - this.clickEy) * 0.1 * trueL
-                    /* function drawArrow(ctx, fromX, fromY, toX, toY, theta, headlen, width, color) {
-                        var theta = theta || 30,
-                            headlen = headlen || 10,
-                            width = width || 1,
-                            color = color || '#000',
-                            angle = Math.atan2(fromY - toY, fromX - toX) * 180 / Math.PI,
-                            angle1 = (angle + theta) * Math.PI / 180,
-                            angle2 = (angle - theta) * Math.PI / 180,
-                            topX = headlen * Math.cos(angle1),
-                            topY = headlen * Math.sin(angle1),
-                            botX = headlen * Math.cos(angle2),
-                            botY = headlen * Math.sin(angle2);
-                        ctx.save();
-                        ctx.beginPath();
-                        var arrowX, arrowY;
-                        ctx.moveTo(fromX, fromY);
-                        ctx.lineTo(toX, toY);
-                        arrowX = toX + topX;
-                        arrowY = toY + topY;
-                        ctx.moveTo(arrowX, arrowY);
-                        ctx.lineTo(toX, toY);
-                        arrowX = toX + botX;
-                        arrowY = toY + botY;
-                        ctx.lineTo(arrowX, arrowY);
-                        ctx.strokeStyle = color;
-                        ctx.lineWidth = width;
-                        ctx.stroke();
-                        ctx.restore();
-                    } */
-                    this.tuoyuan.show()
-                    this.tuoyuan.dirty()
-
+                    this.arrow.show()
+                    let theta = 20,
+                        sx = this.clickSx,
+                        sy = this.clickSy,
+                        ex = this.clickEx,
+                        ey = this.clickEy,
+                        headlen = 10,
+                        angle = Math.atan2(sy - ey, sx - ex) * 180 / Math.PI,
+                        angle1 = (angle + theta) * Math.PI / 180,
+                        angle2 = (angle - theta) * Math.PI / 180,
+                        topX = headlen * Math.cos(angle1),
+                        topY = headlen * Math.sin(angle1),
+                        botX = headlen * Math.cos(angle2),
+                        botY = headlen * Math.sin(angle2),
+                        arrowX1 = ex + topX,
+                        arrowY1 = ey + topY,
+                        arrowX2 = ex + botX,
+                        arrowY2 = ey + botY;
+                    let guiji = [[sx, sy], [ex, ey], [arrowX1, arrowY1], [ex, ey], [arrowX2, arrowY2]]
+                    this.arrow.dirty()
+                    this.arrow.attr({
+                        style: {
+                            lineWidth: this.fontsize,
+                            stroke: this.color
+                        },
+                        shape: {
+                            points: guiji,
+                            smooth: 0.1
+                        },
+                    })
                 }
             }
         },
@@ -532,6 +550,57 @@ export default {
                         height: this.clickEy - this.clickSy,
                         color: this.color,
                         font: this.fontsize
+                    })
+                } else if (this.shapemode == 'arrow') {
+                    //console.log(`开始点：${this.clickSx} ${this.clickSy} 结束点：${this.clickEx} ${this.clickEy}`)
+                    let theta = 20,
+                        sx = this.clickSx,
+                        sy = this.clickSy,
+                        ex = this.clickEx,
+                        ey = this.clickEy,
+                        headlen = 10,
+                        angle = Math.atan2(sy - ey, sx - ex) * 180 / Math.PI,
+                        angle1 = (angle + theta) * Math.PI / 180,
+                        angle2 = (angle - theta) * Math.PI / 180,
+                        topX = headlen * Math.cos(angle1),
+                        topY = headlen * Math.sin(angle1),
+                        botX = headlen * Math.cos(angle2),
+                        botY = headlen * Math.sin(angle2),
+                        arrowX1 = ex + topX,
+                        arrowY1 = ey + topY,
+                        arrowX2 = ex + botX,
+                        arrowY2 = ey + botY;
+                    let guiji = [[sx, sy], [ex, ey], [arrowX1, arrowY1], [ex, ey], [arrowX2, arrowY2]]
+                    let arrow = new zrender.Polyline({
+                        draggable: true,
+                        shape: {
+                            points: guiji,
+                            smooth: 0.1
+                        },
+                        style: {
+                            lineWidth: this.fontsize,
+                            stroke: this.color,
+                        },
+                        cursor: 'move'
+                    })
+                    arrow.on("mousedown", () => {
+                        this.$refs.zrenders.removeEventListener('mousedown', this.part1)
+                        this.$refs.zrenders.removeEventListener('mousemove', this.part2)
+                        this.$refs.zrenders.removeEventListener('mouseup', this.part3)
+                        this.downflag = false
+                    })
+                    arrow.on("mouseup", () => {
+                        this.$refs.zrenders.addEventListener('mousedown', this.part1)
+                        this.$refs.zrenders.addEventListener('mousemove', this.part2)
+                        this.$refs.zrenders.addEventListener('mouseup', this.part3)
+                    })
+                    this.shapeid.push(arrow)
+                    this.g.add(arrow)
+                    this.arrow.hide();
+                    this.$socket.emit('arrow', {
+                        points: JSON.stringify(guiji),
+                        stroke: this.color,
+                        lineWidth: this.fontsize
                     })
                 } else if (this.shapemode == 'pen' && this.tempguiji.length >= 2) {
                     let guiji = zrender.util.clone(this.tempguiji)//深拷贝路径
