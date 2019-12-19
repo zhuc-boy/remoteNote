@@ -22,6 +22,15 @@ const routesone = [
             id: 4
         }
     },
+    {
+        path: "/b",
+        name: "b",
+        component: () => import(/* webpackChunkName: "addFamily" */ "./views/index.vue"),
+        meta: {
+            title: 'ceshi',
+            id: 4
+        }
+    },
 
 ];
 
