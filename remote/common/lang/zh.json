@@ -1,0 +1,11 @@
+{
+    "msg": {
+        "login": "登录"
+    },
+    "mainpage": {
+        "name": "姓名"
+    },
+    "control": {
+        "changeLanguage": "切换语言"
+    }
+}

@@ -2,7 +2,7 @@
     <div class="fengbu">
         <div class="screen" ref="screen">
             <div ref="zrenders" id="zrenders" style="width: max-content;"></div>
-            <div class="ins" v-show="showinput" :style="{top:i_top+'px',left:i_left+'px',width:i_width,color:color}">
+            <div class="ins" v-show="showinput" :style="{top:i_top+'px',left:i_left+'px',width:i_width,color:color,fontsize:fontsize*6+'px'}">
                 <textarea v-model="inputvalue" type="text" @blur="inputblur" />
                 </div>
         </div>
@@ -311,7 +311,7 @@ export default {
                     position: [this.i_left, this.i_top],
                     style: {
                         text: this.inputvalue,
-                        fontSize: '14',
+                        fontSize: this.fontSize * 6,
                         fontWeight: '1000',
                         fill: '#00ff00',
                         textFill: this.color
@@ -889,6 +889,7 @@ export default {
         padding: 5px;
         background-color: rgba(100, 100, 100, 0.3);
         color: inherit;
+        font-size: inherit;
     }
 }
 .fengbu {

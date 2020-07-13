@@ -16,21 +16,21 @@ const routesone = [
     {
         path: "/s",
         name: "s",
-        component: () => import(/* webpackChunkName: "addFamily" */ "./views/huitu.vue"),
+        component: () => import("./views/color.vue"),
         meta: {
             title: 'ceshi',
             id: 4
         }
     },
-    {
+    /* {
         path: "/b",
         name: "b",
-        component: () => import(/* webpackChunkName: "addFamily" */ "./views/index.vue"),
+        component: () => import("./views/index.vue"),
         meta: {
             title: 'ceshi',
             id: 4
         }
-    },
+    }, */
 
 ];
 

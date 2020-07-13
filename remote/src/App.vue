@@ -1,13 +1,16 @@
 <template>
-    <div id="app">
+    <div id="app" :style="globalColor">
         <router-view />
         <!-- <router-view name="floor"></router-view> -->
     </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-
+    computed: mapState({
+        globalColor: (state) => state.globalColor
+    })
 }
 </script>
 

@@ -1,0 +1,11 @@
+{
+    "msg": {
+        "login": "login"
+    },
+    "mainpage": {
+        "name": "name"
+    },
+    "control": {
+        "changeLanguage": "switch language"
+    }
+}
