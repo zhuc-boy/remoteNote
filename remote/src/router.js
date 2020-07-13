@@ -1,9 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 //import Floor from '@/components/Floor.vue';
-
+import { i18n } from './main'
 Vue.use(Router);
-
 const routesone = [
     {
         path: "/",
@@ -46,6 +45,9 @@ router.beforeEach((to, from, next) => {
     const title = to.meta && to.meta.title;
     if (title) {
         document.title = title;
+    }
+    if (window.localStorage.getItem("lan")) {
+        i18n.locale = window.localStorage.getItem("lan")
     }
     next();
 });

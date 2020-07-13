@@ -5,8 +5,9 @@ import store from "./store";
 // import VueSocketIO from 'vue-socket.io'
 import VueI18n from 'vue-i18n'
 Vue.config.productionTip = false;
+
 Vue.use(VueI18n)
-const i18n = new VueI18n({
+export const i18n = new VueI18n({
     locale: "zh",
     messages: {
         'zh': require('../common/lang/zh.json'),

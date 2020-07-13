@@ -17,7 +17,7 @@
                 <option value="jp">日本語</option>
             </select>
         </label>
-
+        <div>{{locale}}</div>
         <!-- <span @click="changeLaguages()">{{$t("control.changeLanguage")}}</span> -->
         <!-- <img v-lazy="" alt=""> -->
     </div>
@@ -30,10 +30,16 @@ export default {
     },
     data() {
         return {
-            labelColor: "#222"
+            labelColor: "#222222"
         }
     },
-
+    computed: {
+        locale() {
+            window.localStorage.setItem("lan", this.$i18n.locale)
+            console.log(this.$i18n.locale)
+            return this.$i18n.locale
+        }
+    },
     methods: {
         getcolor() {
             this.$store.dispatch("changeColor", this.labelColor)
