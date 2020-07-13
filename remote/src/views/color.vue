@@ -6,7 +6,9 @@
             <!--  v-model="$store.state.globalColor['--label-color']" -->
         </div>
         <child />
-        <input type="text" :placeholder="$t('mainpage.name')">
+        <div>
+            <input type="text" :placeholder="$t('mainpage.name')">
+        </div>
         <label>
             {{$t("control.changeLanguage")}}
             <select v-model="$i18n.locale">
