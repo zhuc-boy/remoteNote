@@ -7,7 +7,16 @@
         </div>
         <child />
         <input type="text" :placeholder="$t('mainpage.name')">
-        <span @click="changeLaguages()">{{$t("control.changeLanguage")}}</span>
+        <label>
+            {{$t("control.changeLanguage")}}
+            <select v-model="$i18n.locale">
+                <option value="en">english</option>
+                <option value="zh">简体中文</option>
+                <option value="jp">日本語</option>
+            </select>
+        </label>
+
+        <!-- <span @click="changeLaguages()">{{$t("control.changeLanguage")}}</span> -->
         <!-- <img v-lazy="" alt=""> -->
     </div>
 </template>

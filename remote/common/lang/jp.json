@@ -1,0 +1,11 @@
+{
+    "msg": {
+        "login": "ログイン"
+    },
+    "mainpage": {
+        "name": "名前"
+    },
+    "control": {
+        "changeLanguage": "言語を切り替え"
+    }
+}
