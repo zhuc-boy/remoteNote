@@ -3,18 +3,26 @@
         <div class="Num">{{showNum}}</div>
         <div class="calcBox">
             <div class="gridbox" ref="gridbox">
-                <div data-item="bt" class="a">1</div>
-                <div data-item="bt">2</div>
-                <div data-item="bt">3</div>
-                <div data-item="bt" class="d">4</div>
-                <div data-item="bt" class="e">5</div>
-                <div data-item="bt" class="i">6</div>
+                <div data-item="clear">C</div>
+                <div data-item="colc">+/-</div>
+                <div data-item="colc">%</div>
+                <div data-item="">/</div>
                 <div data-item="bt">7</div>
                 <div data-item="bt">8</div>
                 <div data-item="bt">9</div>
-                <div data-item="clear">C</div>
-                <div data-item="bt">0</div>
-                <div data-item="colc"></div>
+                <div data-item="">*</div>
+                <div data-item="bt">4</div>
+                <div data-item="bt">5</div>
+                <div data-item="bt">6</div>
+                <div data-item="">-</div>
+                <div data-item="bt">1</div>
+                <div data-item="bt">2</div>
+                <div data-item="bt">3</div>
+                <div data-item="">+</div>
+                <div class="zero" data-item="bt">0</div>
+                <div data-item="">.</div>
+                <div data-item="">=</div>
+
             </div>
         </div>
 
@@ -93,31 +101,27 @@ export default {
     user-select: none; /* Non-prefixed version, currently not supported by any browser */
     // margin: 0px auto;
     display: grid;
-    grid-template-columns: repeat(3, calc((100vw - 20px) / 3));
-    grid-template-rows: repeat(4, calc((100vw - 20px) / 3));
+    grid-template-columns: repeat(4, calc((100vw - 30px) / 4));
+    grid-template-rows: repeat(5, calc((100vw - 30px) / 4));
     grid-gap: 10px;
     grid-template-areas:
-        "a b c"
-        "d e f"
-        "g h i";
-    // .a {
-    //     grid-area: a;
-    // }
-    // .d {
-    //     grid-area: d;
-    // }
-    // .e {
-    //     grid-area: e;
-    // }
-    // .i {
-    //     grid-area: i;
-    // }
+        "a b c j"
+        "d e f k"
+        "m n o p"
+        "q r s t"
+        "g g i l";
+    .zero {
+        grid-area: g;
+        border-radius: calc((100vw - 30px) / 8);
+        // transform: scaleX(0.9);
+    }
+
     & > div {
         // border: 1px solid black;
         transform: scale(0.8);
         border-radius: 50%;
-        line-height: calc((100vw - 20px) / 3);
-        font-size: calc((100vw - 20px) / 12);
+        line-height: calc((100vw - 30px) / 4);
+        font-size: calc((100vw - 30px) / 12);
         text-align: center;
         vertical-align: middle;
         background-color: #fff;
