@@ -7,10 +7,19 @@ const routesone = [
     {
         path: "/",
         name: "index",
-        redirect: '/s',
+        redirect: '/d',
         meta: {
             title: '家庭医生'
         },
+    },
+    {
+        path: "/d",
+        name: "d",
+        component: () => import("./views/grid.vue"),
+        meta: {
+            title: 'ceshi',
+            id: 4
+        }
     },
     {
         path: "/s",

@@ -1,13 +1,20 @@
-<template>
+<template >
     <div>
         <div class="labelpart">{{$t('msg.login')}}</div>
         <div>
             <input type="color" v-model="labelColor" @change="getcolor">
             <!--  v-model="$store.state.globalColor['--label-color']" -->
         </div>
-        <child />
+        <child @keyup.enter.native="jianpan">
+            <child>
+                abcadwa
+            </child>
+        </child>
         <div>
             <input type="text" :placeholder="$t('mainpage.name')">
+        </div>
+        <div>
+            <input type="number" v-model.number="ces">
         </div>
         <label>
             {{$t("control.changeLanguage")}}
@@ -19,19 +26,24 @@
         </label>
         <div>{{locale}}</div>
         <span @click="gohuitu">点击跳转</span>
+        <img :src="`@/img/bg`" alt="">
+        <input />
         <!-- <span @click="changeLaguages()">{{$t("control.changeLanguage")}}</span> -->
         <!-- <img v-lazy="" alt=""> -->
     </div>
 </template>
 <script>
+import img from '@/components/img.json'
 import child from "../components/child1"
 export default {
     components: {
-        "child": child
+        "child": child,
+        imgsrc: null
     },
     data() {
         return {
-            labelColor: "#222222"
+            labelColor: "#222222",
+            ces: null
         }
     },
     computed: {
@@ -40,6 +52,20 @@ export default {
             console.log(this.$i18n.locale)
             return this.$i18n.locale
         }
+    },
+    created() {
+        this.imgsrc = img
+        // console.log(img)
+        // document.getElementById("app").style.display = "none"
+        // function aDisplay() {
+        //     // document.getElementById("app").style.display = "block"
+        //     document.getElementById("guodu").style.display = "none"
+        //     clearTimeout(aDisplay)
+        // }
+        // setTimeout(aDisplay, 10000);
+    },
+    mounted() {
+        console.log(this.$children)
     },
     methods: {
         getcolor() {
@@ -53,7 +79,13 @@ export default {
             this.$i18n.locale = lang
         },
         gohuitu() {
-            this.$router.push("./b")
+            Object.assign(this.$data, this.$options.data())
+            // console.log(this.$data, this.$options.data())
+            // this.$router.push("./b")
+        },
+        jianpan(e) {
+            console.log(1111)
+            console.log(e)
         }
     }
 
