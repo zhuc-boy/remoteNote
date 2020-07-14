@@ -21,15 +21,15 @@ const routesone = [
             id: 4
         }
     },
-    /* {
+    {
         path: "/b",
         name: "b",
-        component: () => import("./views/index.vue"),
+        component: () => import("./views/huitu.vue"),
         meta: {
             title: 'ceshi',
             id: 4
         }
-    }, */
+    },
 
 ];
 

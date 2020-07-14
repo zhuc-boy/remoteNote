@@ -18,6 +18,7 @@
             </select>
         </label>
         <div>{{locale}}</div>
+        <span @click="gohuitu">点击跳转</span>
         <!-- <span @click="changeLaguages()">{{$t("control.changeLanguage")}}</span> -->
         <!-- <img v-lazy="" alt=""> -->
     </div>
@@ -50,6 +51,9 @@ export default {
             console.log(this.$i18n.locale)
             let lang = this.$i18n.locale === 'zh' ? 'en' : 'zh'
             this.$i18n.locale = lang
+        },
+        gohuitu() {
+            this.$router.push("./b")
         }
     }
 
