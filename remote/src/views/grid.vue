@@ -34,6 +34,8 @@ export default {
         return {
             touchI: null,
             touchO: null,
+            clickI: null,
+            clickO: null,
             showNum: 0,
         }
     },
@@ -52,11 +54,27 @@ export default {
             e.target.classList.remove('actived')
             e.target.classList.add('deactived')
         }, true)
+        this.clickI = gridbox.addEventListener("mousedown", e => {
+            e.target.classList.remove('deactived')
+            e.target.classList.add('actived')
+            if (e.target.dataset.item === "bt") {
+                this.growNum(e.target.innerHTML)
+            } else if (e.target.dataset.item === "clear") {
+                this.showNum = 0
+            }
+        }, true)
+        this.clickO = gridbox.addEventListener("mouseup", e => {
+            e.target.classList.remove('actived')
+            e.target.classList.add('deactived')
+        }, true)
+
     },
     beforeDestroy() {
         let gridbox = this.$refs.gridbox
         gridbox.removeEventListener("touchstart", this.touchI)
         gridbox.removeEventListener("touchend", this.touchO)
+        gridbox.removeEventListener("mousedown", this.clickI)
+        gridbox.removeEventListener("mouseup", this.clickO)
     },
     methods: {
         growNum(e) {
@@ -134,9 +152,9 @@ export default {
             place-items: center;
             cursor: pointer;
         }
-        & > div:hover {
+        /* & > div:hover {
             box-shadow: -2px 0px 1px #222;
-        }
+        } */
         & > div.actived {
             box-shadow: -2px 0px 1px #222;
         }
