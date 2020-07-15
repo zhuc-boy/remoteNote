@@ -93,9 +93,7 @@ export const myMixin = {
         paintpic: function () {
             let ctx = document.getElementsByTagName('canvas')
             let dataURL = ctx[0].toDataURL("image/png", 1)
-            console.log(dataURL)
         },
-
         part1: function (e) {
             if (this.txtmodel == 'true') {
                 if (this.inputflag == false) {

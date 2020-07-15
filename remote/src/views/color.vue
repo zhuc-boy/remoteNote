@@ -49,7 +49,6 @@ export default {
     computed: {
         locale() {
             window.localStorage.setItem("lan", this.$i18n.locale)
-            console.log(this.$i18n.locale)
             return this.$i18n.locale
         }
     },
@@ -65,7 +64,6 @@ export default {
         // setTimeout(aDisplay, 10000);
     },
     mounted() {
-        console.log(this.$children)
     },
     methods: {
         getcolor() {
@@ -74,7 +72,6 @@ export default {
             // this.$store.state.globalColor["--label-color"] = this.labelColor
         },
         changeLaguages() {
-            console.log(this.$i18n.locale)
             let lang = this.$i18n.locale === 'zh' ? 'en' : 'zh'
             this.$i18n.locale = lang
         },
@@ -83,9 +80,7 @@ export default {
             // console.log(this.$data, this.$options.data())
             // this.$router.push("./b")
         },
-        jianpan(e) {
-            console.log(1111)
-            console.log(e)
+        jianpan() {
         }
     }
 

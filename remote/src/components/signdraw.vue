@@ -148,7 +148,6 @@ export default {
             this.g.add(tempellipse)
         },
         sendpath: function (data) {
-            console.log(data.points)
             let templine = new zrender.Polyline({
                 draggable: true,
                 shape: {
